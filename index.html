@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physical Barcode Scanner</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #e9ecef;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        input {
+            padding: 15px;
+            font-size: 20px;
+            border: 2px solid #007bff;
+            border-radius: 8px;
+            width: 250px;
+            text-align: center;
+        }
+        p { color: #666; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Scan Your Book</h1>
+        <input type="text" id="barcodeInput" placeholder="Click here and scan..." autofocus>
+        <p>Your scanner will automatically "Enter" after scanning.</p>
+    </div>
+
+    <script>
+        const inputField = document.getElementById('barcodeInput');
+
+        // This listens for when the scanner presses "Enter"
+        inputField.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                const isbn = inputField.value.trim();
+                
+                if (isbn.length >= 10) {
+                    // Go to Open Library
+                    window.location.href = `https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`;
+                } else {
+                    alert("That doesn't look like a full ISBN. Try scanning again!");
+                    inputField.value = ""; // Clear it for a retry
+                }
+            }
+        });
+
+        // Safety feature: Keep the box selected so you don't have to click it
+        document.addEventListener('click', () => {
+            inputField.focus();
+        });
+    </script>
+</body>
+</html>
